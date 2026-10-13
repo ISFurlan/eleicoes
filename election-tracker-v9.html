@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Brazil Runoff Tracker - 25 October 2026</title>
+<style>
+:root,[data-theme="dark"]{--bg:radial-gradient(circle at 0% 0%,rgba(255,77,94,.12),transparent 38%),radial-gradient(circle at 100% 0%,rgba(77,155,255,.14),transparent 38%),#090b10;
+ --panel:#12151d;--edge:#232937;--text:#f1f3f8;--muted:#8b93a7;--track:#1b1f2a;--hover:rgba(255,255,255,.05);--bar:rgba(10,12,18,.85);--shadow:0 1px 0 rgba(255,255,255,.03) inset;
+ --accent:#f2c14e;--onaccent:#090b10;--amber:#ffb86b;
+ --lula:#ff4d5e;--lula-deep:#c8243a;--lula-glow:rgba(255,77,94,.6);--lula-soft:rgba(255,77,94,.25);
+ --flavio:#4d9bff;--flavio-deep:#1f62d6;--flavio-glow:rgba(77,155,255,.6);--flavio-soft:rgba(77,155,255,.25);--flavio-dim:#1f3558}
+[data-theme="light"]{--bg:#edf0f6;--panel:#ffffff;--edge:#dce1eb;--text:#151b2b;--muted:#5b6578;--track:#e6eaf2;--hover:rgba(20,30,60,.05);--bar:rgba(255,255,255,.9);--shadow:0 1px 2px rgba(20,30,60,.07);
+ --accent:#b9770e;--onaccent:#ffffff;--amber:#b45309;
+ --lula:#d6293e;--lula-deep:#a51c2e;--lula-glow:rgba(214,41,62,.35);--lula-soft:rgba(214,41,62,.15);
+ --flavio:#1f6fe0;--flavio-deep:#164fa8;--flavio-glow:rgba(31,111,224,.35);--flavio-soft:rgba(31,111,224,.15);--flavio-dim:#cfe0fb}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--text);font-family:system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:var(--bg);background-attachment:fixed}
+.appbar{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:10px 22px;background:var(--bar);backdrop-filter:blur(10px);border-bottom:1px solid var(--edge)}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--lula),var(--flavio));display:grid;place-items:center;color:#fff;font-weight:800;font-size:13px}
+.brand b{display:block;font-size:15px;letter-spacing:-.01em}.brand small{display:block;color:var(--muted);font-size:12px}
+.nav{display:flex;gap:2px;flex:1}.nav a{color:var(--muted);text-decoration:none;font-size:14px;padding:7px 12px;border-radius:8px}.nav a:hover{background:var(--hover);color:var(--text)}
+.tools{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.wrap{max-width:1320px;margin:0 auto;padding:22px 22px 60px}
+.pill{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--edge);border-radius:99px;padding:6px 14px;font-size:13px}
+.pill select{border:0;background:transparent;padding:2px 4px;border-radius:6px;color:var(--text)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}.dot.off{background:var(--muted);box-shadow:none}
+.card{background:var(--panel);border:1px solid var(--edge);border-radius:14px;padding:18px;box-shadow:var(--shadow);min-width:0}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-bottom:16px}
+.s12{grid-column:span 12}.s8{grid-column:span 8}.s7{grid-column:span 7}.s5{grid-column:span 5}.s4{grid-column:span 4}
+.ch{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px}
+h2{margin:0;font-size:15px;font-weight:650;letter-spacing:-.005em}.cs{margin:3px 0 0;color:var(--muted);font-size:12.5px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.seg{display:inline-flex;background:var(--track);border-radius:99px;padding:3px}
+.seg button{border:0;background:transparent;border-radius:99px;padding:7px 16px}
+button,select{font:inherit;font-size:13.5px;border-radius:99px;border:1px solid var(--edge);background:var(--panel);color:var(--text);padding:8px 14px}
+button{font-weight:600;cursor:pointer}button:hover{background:var(--hover)}
+button.on{background:var(--accent);color:var(--onaccent);border-color:var(--accent)}
+button.icon{padding:6px 11px;font-size:15px;line-height:1}
+select{border-radius:9px;padding:7px 9px}
+input{font:inherit;font-size:13.5px;background:var(--track);color:var(--text);border:1px solid var(--edge);border-radius:9px;padding:8px 11px;width:120px}
+input[type=search]{width:190px}
+button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.label{color:var(--muted);font-size:12.5px}.hint{color:var(--muted);font-size:13px;margin:10px 0 0;line-height:1.5}
+#msg{color:var(--amber);font-size:13.5px;margin-top:10px}
+small{color:var(--muted);font-size:12px}
+.num{font-variant-numeric:tabular-nums;font-size:13.5px}
+.pos{color:var(--lula)}.neg{color:var(--flavio)}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin:0 6px 0 12px;vertical-align:baseline}
+.legend,.legend2{color:var(--muted);font-size:12.5px;margin:0 0 12px;line-height:1.7}
+.found{display:flex;flex-direction:column;gap:6px;margin-top:12px}.found button{text-align:left;border-radius:9px;font-weight:400;font-size:13px}
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:16px 0}
+.kpi{border-left:3px solid var(--edge)}.kpi.a{border-left-color:var(--accent)}
+.val{font-size:26px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums;letter-spacing:-.01em}.val.sm{font-size:16px}
+.track{height:7px;border-radius:99px;background:var(--track);overflow:hidden;margin:10px 0 4px}
+.track i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width 1.2s ease-out}
+/* headline duel */
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.cand .who{font-size:clamp(16px,2vw,20px);font-weight:600;display:flex;align-items:center;gap:10px}
+#c2 .who{justify-content:flex-end}.cand .who::before{content:"";width:11px;height:11px;border-radius:50%}
+#c1 .who::before{background:var(--lula)}#c2 .who::before{background:var(--flavio);order:2}
+.cand .big{font-size:clamp(44px,7vw,84px);font-weight:800;letter-spacing:-.03em;line-height:1;margin:8px 0;font-variant-numeric:tabular-nums}
+#c1 .big{color:var(--lula)}#c2 .big{color:var(--flavio);text-align:right}
+.cand .meta{display:flex;flex-direction:column;gap:3px;color:var(--muted);font-size:12.5px;font-variant-numeric:tabular-nums}#c2 .meta{align-items:flex-end}
+.cand:not(.lead){opacity:.88}
+.tug{position:relative;height:22px;border-radius:99px;background:var(--track);margin:36px 0 6px}
+.tug i{position:absolute;top:0;bottom:0;transition:width 1.2s ease-out}
+#b1{left:0;border-radius:99px 6px 6px 99px;background:linear-gradient(90deg,var(--lula-deep),var(--lula));box-shadow:0 0 12px var(--lula-soft)}
+#b2{right:0;border-radius:6px 99px 99px 6px;background:linear-gradient(270deg,var(--flavio-deep),var(--flavio));box-shadow:0 0 12px var(--flavio-soft)}
+.leadL #b1{box-shadow:0 0 22px var(--lula-glow)}.leadR #b2{box-shadow:0 0 22px var(--flavio-glow)}
+.tick{position:absolute;top:-6px;bottom:-6px;width:3px;border-radius:2px;background:var(--text);opacity:.9}
+.tklabel{position:absolute;top:-28px;transform:translateX(-50%);font-size:11.5px;color:var(--muted);white-space:nowrap}
+.mid{position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--text);opacity:.3}
+/* charts */
+.empty{color:var(--muted);font-size:13px;padding:56px 0;text-align:center}
+#trend svg{display:block;width:100%;height:auto}
+.swscroll{max-height:310px;overflow:auto;padding-right:6px}
+.srw{display:grid;grid-template-columns:30px 1fr 48px;gap:8px;align-items:center;height:21px;font-size:12px}
+.sbar{position:relative;height:10px;background:linear-gradient(var(--edge),var(--edge)) center/1px 100% no-repeat}
+.sbar i{position:absolute;top:0;bottom:0;border-radius:3px}.sbar i.p{background:var(--lula)}.sbar i.n{background:var(--flavio)}
+/* tile map */
+.tiles{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.tile{aspect-ratio:1;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);border:1px solid var(--edge);transition:background .8s;cursor:pointer}
+.tile:hover{outline:2px solid var(--text)}.tile b{font-size:13px}.tile small{color:inherit;opacity:.85;font-size:10.5px;font-variant-numeric:tabular-nums}
+.tile.strong{color:#fff}.tile.wait{background:var(--track);color:var(--muted)}
+/* tables */
+.scroll{max-height:540px;overflow:auto}
+.srow{display:grid;grid-template-columns:170px 80px 1fr 130px 64px 70px;gap:12px;align-items:center;padding:9px 8px;border-bottom:1px solid var(--edge)}
+#rows .srow:nth-child(even){background:var(--hover)}
+.srow.hd{color:var(--muted);font-size:12px;position:sticky;top:0;background:var(--panel);z-index:1}
+.srow b,.crow b{font-size:14px}.srow span.n,.crow span.n{color:var(--muted);font-size:12.5px;margin-left:8px}
+.bar{position:relative;height:11px;border-radius:99px;background:var(--flavio-dim)}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--lula-deep),var(--lula));box-shadow:0 0 8px var(--lula-soft);transition:width 1.2s ease-out}
+.bar .tick{width:2px;top:-4px;bottom:-4px}
+.wait .bar{background:var(--track)}.wait .bar i{box-shadow:none;background:transparent}.srow.wait{opacity:.55}
+.featrow{display:grid;grid-template-columns:1fr 120px 80px;gap:12px;align-items:center}
+.crow{display:grid;grid-template-columns:minmax(140px,1.2fr) 90px 1.6fr 130px;gap:12px;align-items:center;padding:8px;border-bottom:1px solid var(--edge);cursor:pointer}
+.crow.hd{cursor:default;color:var(--muted);font-size:12px}.crow.sel{cursor:default;background:var(--hover);border-radius:9px}
+.crow:hover:not(.hd):not(.sel){background:var(--hover)}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.hgrid .card{box-shadow:none}
+.log{list-style:none;margin:14px 0 0;padding:0;color:var(--muted);font-size:12.5px;line-height:1.8;font-variant-numeric:tabular-nums}
+@media(max-width:1000px){.s8,.s7,.s5,.s4{grid-column:span 12}.nav{display:none}}
+@media(max-width:700px){.wrap{padding:16px 12px 50px}.appbar{padding:8px 12px}.srow,.crow{grid-template-columns:1fr 1fr;gap:6px 12px}.srow .bar,.crow .bar{grid-column:1/-1}.srow.hd,.crow.hd{display:none}.featrow{grid-template-columns:1fr 1fr}.featrow .bar{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<header class="appbar">
+  <div class="brand"><span class="logo">BR</span><div><b data-i="title">Election night tracker</b><small data-i="kicker"></small></div></div>
+  <nav class="nav"><a href="#overview" data-i="nav1">Overview</a><a href="#states" data-i="nav2">States</a><a href="#overseas" data-i="nav3">Overseas</a><a href="#citypanel" data-i="nav4">Cities</a><a href="#health" data-i="healthTitle">Feed status</a></nav>
+  <div class="tools">
+    <div class="pill" id="count">...</div>
+    <div class="pill"><span class="dot off" id="dot"></span><span id="status">...</span></div>
+    <label class="pill"><span data-i="langLabel">Language</span><select id="lang" aria-label="Language / Idioma"><option value="en">English</option><option value="pt">Português (Brasil)</option><option value="es">Español (España)</option></select></label>
+    <button class="icon" id="btnTheme" data-al="themeAria">&#9680;</button>
+  </div>
+</header>
+
+<div class="wrap">
+<section class="card">
+  <div class="row">
+    <div class="seg"><button id="btnDemo" data-i="btnDemo">Demo</button><button id="btnLive" data-i="btnLive">Live from TSE</button></div>
+    <label class="label"><span data-i="pairLabel">2022 Lula side</span> <select id="pair" data-al="pairAria"></select></label>
+    <span class="label" data-i="sub" style="margin-left:auto"></span>
+  </div>
+  <div id="livebox" style="display:none">
+    <div class="row" style="margin-top:14px">
+      <label for="code" class="label" data-i="codeLabel">Election code</label>
+      <input id="code" inputmode="numeric" data-ph="codePh">
+      <button id="btnStart" data-i="btnStart">Start</button>
+      <button id="btnTest" data-i="btnTest">Test with first round (6257)</button>
+      <button id="btnFind" data-i="btnFind">Find code</button>
+    </div>
+    <div class="found" id="found"></div>
+    <p class="hint" data-i="liveHint"></p>
+  </div>
+  <div id="msg"></div>
+</section>
+
+<div class="kpis">
+  <div class="card kpi a"><div class="label" data-i="leadL">Ahead nationally</div><div class="val" id="lead">-</div><small id="leadNote"></small></div>
+  <div class="card kpi"><div class="label" data-i="counted">Ballots counted</div><div class="val" id="ncounted">0.0%</div><div class="track"><i id="ncbar" style="width:0"></i></div></div>
+  <div class="card kpi"><div class="label" data-i="wonL">States ahead (reporting)</div><div class="val" id="won">-</div><small data-i="wonNote"></small></div>
+  <div class="card kpi"><div class="label" data-i="repL">Areas reporting</div><div class="val" id="rep">0 / 28</div><small data-i="repNote"></small></div>
+</div>
+
+<div class="grid" id="overview">
+  <section class="card s8">
+    <div class="ch"><div><h2 data-i="chip">Nationwide</h2><p class="cs" data-i="heroSub"></p></div></div>
+    <div class="duel">
+      <div class="cand" id="c1"><div class="who"><span id="n1">Candidate A</span></div><div class="big" id="p1">0.00%</div><div class="meta"><span id="v1"></span><span id="s1"></span></div></div>
+      <div class="cand" id="c2"><div class="who"><span id="n2">Candidate B</span></div><div class="big" id="p2">0.00%</div><div class="meta"><span id="v2"></span><span id="s2"></span></div></div>
+    </div>
+    <div class="tug" id="tug"><i id="b1" style="width:0"></i><i id="b2" style="width:0"></i><span class="mid"></span><span class="tick" style="left:50.9%" data-ti="tickTitle"></span><span class="tklabel" id="tklabel" style="left:50.9%"></span></div>
+  </section>
+  <section class="card s4">
+    <div class="ch"><h2 data-i="mapTitle">States at a glance</h2></div>
+    <div id="tiles" class="tiles"></div>
+    <p class="legend2" id="maplegend" style="margin:12px 0 0"></p>
+  </section>
+  <section class="card s7"><div class="ch"><div><h2 data-i="trendTitle">Share over time</h2><p class="cs" id="trendSub"></p></div></div><div id="trend"></div></section>
+  <section class="card s5"><div class="ch"><div><h2 data-i="swingTitle">Swing by state</h2><p class="cs" id="swingSub"></p></div></div><div class="swscroll" id="swing"></div></section>
+</div>
+
+<div class="grid">
+  <section class="card s12" id="overseas">
+    <div class="ch"><h2 data-i="overseasTitle">Overseas votes</h2></div>
+    <div id="featbox"></div>
+    <div class="row" style="margin-top:22px;justify-content:space-between">
+      <h2 data-i="byCountry">By country</h2>
+      <label class="label"><span data-i="countryLabel">Country</span> <select id="country" data-al="countryAria"><option value="" data-i="allOverseas">All overseas</option></select></label>
+    </div>
+    <p class="hint" id="cnote" data-i="cnoteInit"></p>
+    <div id="cbody"></div>
+  </section>
+
+  <section class="card s12" id="states">
+    <div class="ch"><h2 data-i="stateByState">State by state</h2>
+      <div class="row"><label class="label"><span data-i="sortLabel">Sort</span> <select id="sort"><option value="arrival" data-i="sortArrival">Reporting first</option><option value="az" data-i="sortAz">A to Z</option><option value="swing" data-i="sortSwing">Biggest swing</option></select></label><button id="btnExport" data-i="btnExport">Export CSV</button></div>
+    </div>
+    <p class="legend" id="legend"></p>
+    <div class="scroll"><div class="srow hd"><span data-i="colState">State</span><span data-i="colCounted">Counted</span><span data-i="colSplit">Live split</span><span data-i="colLive">Live result</span><span data-i="col2022">2022</span><span data-i="colSwing">Swing</span></div><div id="rows"></div></div>
+  </section>
+
+  <section class="card s12" id="citypanel">
+    <div class="ch"><h2 data-i="citiesTitle">Cities by state</h2>
+      <div class="row"><label class="label"><span data-i="stateLabel">State</span> <select id="state"><option value="" data-i="chooseState">Choose a state</option></select></label><input id="csearch" type="search" data-ph="searchPh" data-al="searchAria"></div>
+    </div>
+    <p class="hint" id="citynote" data-i="cityNoteInit"></p>
+    <div id="ctable"></div>
+  </section>
+
+  <section class="card s12" id="health">
+    <div class="ch"><h2 data-i="healthTitle">Feed status</h2><button id="btnNow" data-i="btnNow">Check now</button></div>
+    <div class="hgrid">
+      <div class="card"><div class="label" data-i="hLastL">Last check</div><div class="val sm" id="hLast">-</div></div>
+      <div class="card"><div class="label" data-i="hChangeL">Numbers last changed</div><div class="val sm" id="hChange">-</div></div>
+      <div class="card"><div class="label" data-i="hNextL">Next check</div><div class="val sm" id="hNext">-</div></div>
+      <div class="card"><div class="label" data-i="hFilesL">Files read OK</div><div class="val sm" id="hFiles">-</div></div>
+    </div>
+    <ul class="log" id="log"></ul>
+  </section>
+</div>
+<small id="foot" data-i="footDemo"></small>
+</div>
+
+<script>
+/* ---------- Settings ---------- */
+var POLL_SECONDS = 45, DEMO_SECONDS = 2;
+var TSE_BASE = "https://resultados.tse.jus.br/oficial/ele2026/";
+
+/* 2022 runoff: Lula's share of valid votes per area, compiled from published
+   TSE-based tallies (may differ by about 0.1 point from the official file).
+   Last number is approximate valid votes in millions, used only by Demo mode. */
+var AREAS = [
+ ["zz","Overseas (Exterior)",51.28,0.3],
+ ["ac","Acre",29.70,0.45],["al","Alagoas",58.68,1.5],["ap","Amapá",48.64,0.45],["am","Amazonas",51.10,2.0],
+ ["ba","Bahia",72.12,8.0],["ce","Ceará",69.97,5.0],["df","Distrito Federal",41.19,1.9],["es","Espírito Santo",41.96,2.3],
+ ["go","Goiás",41.29,3.9],["ma","Maranhão",71.14,3.9],["mt","Mato Grosso",34.92,2.1],["ms","Mato Grosso do Sul",40.51,1.8],
+ ["mg","Minas Gerais",50.17,12.0],["pa","Pará",54.75,4.4],["pb","Paraíba",66.62,2.4],["pr","Paraná",37.60,6.4],
+ ["pe","Pernambuco",66.93,5.0],["pi","Piauí",76.86,2.0],["rj","Rio de Janeiro",43.47,8.9],["rn","Rio Grande do Norte",65.10,2.1],
+ ["rs","Rio Grande do Sul",43.65,6.6],["ro","Rondônia",29.34,1.0],["rr","Roraima",23.92,0.3],["sc","Santa Catarina",30.73,4.4],
+ ["sp","São Paulo",44.76,26.0],["se","Sergipe",67.21,1.4],["to","Tocantins",51.36,0.9]
+];
+var L22 = 50.90, MARGIN22 = 1.80;
+
+/* ---------- Languages (English, Portuguese-Brazil, Spanish-Spain) ---------- */
+var LANG = "en", LOCALE_TAG = "en-US", NUMLOC = "en-US";
+var DICT = {
+en: {
+ docTitle:"Brazil Runoff Tracker - 25 October 2026", langLabel:"Language",
+ kicker:"Brazil presidential runoff", title:"Election night tracker", sub:"Sunday, 25 October 2026. Live count against the final 2022 runoff.",
+ btnDemo:"Demo", btnLive:"Live from TSE", pairLabel:"2022 Lula side", pairAria:"Which candidate carries the 2022 Lula side",
+ codeLabel:"Election code", codePh:"e.g. 6257", btnStart:"Start", btnTest:"Test with first round (6257)", btnFind:"Find code",
+ liveHint:"Not sure of the code? Press Find code. Otherwise type the second-round code, then press Start and keep this page open. It checks the national file, all 27 states and overseas every 45 seconds, and fills in each area as soon as its numbers appear.",
+ healthTitle:"Feed status", btnNow:"Check now", hLastL:"Last check", hChangeL:"Numbers last changed", hNextL:"Next check", hFilesL:"Files read OK",
+ chip:"Nationwide", tkLabel:"2022 final: Lula {a}, Bolsonaro {b}", tickTitle:"2022 result", counted:"Ballots counted",
+ mapTitle:"States at a glance", mapLegend:"{r}Lula side ahead{b}Other candidate ahead<br>A stronger shade means a bigger lead. The number is the leader's share. Grey means waiting for data.",
+ leadL:"Ahead nationally", wonL:"States ahead (reporting)", wonNote:"2022: Lula side won 13 of 27, plus overseas", repL:"Areas reporting", repNote:"27 states plus overseas",
+ overseasTitle:"Overseas votes", byCountry:"By country", countryLabel:"Country", countryAria:"Filter overseas votes by country", allOverseas:"All overseas",
+ cnoteInit:"Countries appear once overseas votes start coming in.",
+ stateByState:"State by state", sortLabel:"Sort", sortArrival:"Reporting first", sortAz:"A to Z", sortSwing:"Biggest swing",
+ colState:"State", colCounted:"Counted", colSplit:"Live split", colLive:"Live result", col2022:"2022", colSwing:"Swing",
+ citiesTitle:"Cities by state", stateLabel:"State", chooseState:"Choose a state", searchPh:"Search city", searchAria:"Search city",
+ cityNoteInit:"Pick a state, or tap a state on the map. Cities load only for the state you choose, to stay within the TSE limits.",
+ footDemo:"Demo numbers are random and are not real results.",
+ waiting:"waiting", noVotesYet:"no votes yet", votesN:"{n} votes", ptsVs:"pts vs 2022",
+ dayOne:"{n} day to the runoff", dayMany:"{n} days to the runoff", votingDay:"Voting day: polls open", pollsClosed:"Polls closed",
+ legendTxt:"The white tick marks {l}'s 2022 share in that area. Swing is the change in {l}'s share versus 2022: {pos} favors {l}, {neg} favors {r}.",
+ leadNote:"by {m} pts (2022 margin: {m22})", repTxt:"{n} of 28", wonTxt:"{name} {a} of {b}",
+ tileWait:"{name}: waiting for data", tileTip:"{name}: {l} {lp}%, {r} {rp}% (2022: {ref}% for the Lula side)",
+ statusDemo:"Demo (simulated)", statusDemoDone:"Demo finished", logDemo:"Demo mode: the numbers are simulated and move every {n} seconds.",
+ footDemoOverseas:"Demo numbers are random and are not real results. Overseas reports first, then states join one by one.",
+ candA:"Candidate A", candB:"Candidate B", candN:"Candidate {n}", demoCity:"Demo City {n}",
+ statusChoose:"Choose a mode", statusEnter:"Enter a code and press Start", statusConnecting:"Connecting...", statusLive:"Live from TSE, updated {time}",
+ statusWaiting:"Waiting for data...", statusStopped3:"Stopped after 3 errors", statusLayout:"Stopped: unexpected file layout",
+ msgHidden:"The TSE shows zero votes until voting ends at 5 pm Brasília time. Numbers will appear by themselves. ",
+ msgManyMiss:"Many area files are not published yet. Waiting 3 minutes before checking again, to stay within the TSE limits.",
+ msgSomeMiss:"{n} area file(s) not available yet. They will fill in automatically.",
+ msgNoNet:"Your browser could not reach the TSE (no internet, or the browser blocked the request). ",
+ msgLayoutTail:" Please send me this message so I can fix the reader.",
+ msgStopTail:" Stopped to avoid being blocked by the TSE. Check the code and press Start again.",
+ msgRetryTail:" The national file may not be published yet. Trying again in 60 seconds.",
+ msgCodeFirst:"Type the election code first (numbers only).", msgCheckNow:"Check now works in Live mode, after you press Start.", msgFilled:"Code {code} filled in. Press Start.",
+ errStatus:"The TSE answered with status {s}.", errLayout:"Unexpected file layout. Fields found: {f}", errNoCand:"The file has no candidates yet.",
+ errPlaces:"Unexpected places-list layout. Fields found: {f}", errCities:"Unexpected city-list layout. Fields found: {f}",
+ logStart:"Started. Checking the TSE for election code {code}.", logReadYes:"Read {ok} of {tot} files. Numbers changed.", logReadNo:"Read {ok} of {tot} files. No change since the last check.",
+ logProblem:"Problem: {msg}", logManual:"Manual check.",
+ footLive:"Live data: official TSE result files for election code {code}. Names come from the files. 2022 state figures are compiled from published tallies.",
+ hDemoLast:"Demo (fake data)", hDemoChange:"Every {n} s", checking:"checking...", noDataYet:"no data yet", notYet:"not yet", agoS:"{n} s ago", agoM:"{n} min ago", secS:"{n} s", hFilesTxt:"{ok} of {tot}",
+ otherPlaces:"Other places", cnoteTxt:"{c} countries, {p} places, {r} reporting. Click a country to see its places. The white tick marks the 2022 overseas total ({ref}% for the Lula side); country-level 2022 figures are not included.",
+ colPlace:"Place", colCountry:"Country", colVotes:"Votes", place1:"{n} place", placeN:"{n} places", allPlaces:"all places", cntErr:"Country breakdown unavailable: {msg}",
+ citiesErr:"City list unavailable: {msg}", loadingCities:"Loading cities for {name}...", noVotesState:"{name} has no votes yet. Its cities load as soon as the state starts reporting.",
+ cityNote:"{name}: {n} cities, {r} reporting. The white tick marks the state's 2022 result ({ref}% for the Lula side); city-level 2022 figures are not included.",
+ cityMore:" Showing the 150 biggest of {n}; use the search box for the rest.", colCity:"City", pctCounted:"{n}% counted",
+ findLooking:"Looking in the TSE election list...", findNone:"Nothing recognisable found. Open {link} and look for the president election with the second round.", findLink:"the TSE list",
+ findPrompt:"Look for the second round (2nd turn) of the president election, then tap it:", findCode:"code {c}", findErr:"Could not read the list: {msg}. It may not be published yet.",
+ resTxt:"{l} to {r}", featCounted:"Counted {cc}. 2022 overseas: {x}% for the Lula side.",
+ nav1:"Overview", nav2:"States", nav3:"Overseas", nav4:"Cities", heroSub:"Share of valid votes counted so far",
+ trendTitle:"Share over time", trendSub:"{l}'s share of valid votes at each update. Dashed lines: 50% and the 2022 final.", trendEmpty:"The chart starts when the first votes arrive.",
+ swingTitle:"Swing vs 2022 by state", swingSub:"Change in {l}'s share, in points. Red favors {l}, blue favors {r}.", swingEmpty:"No state is reporting yet.",
+ btnExport:"Export CSV", themeAria:"Switch between light and dark theme"
+},
+pt: {
+ docTitle:"Acompanhamento do 2º turno - 25 de outubro de 2026", langLabel:"Idioma",
+ kicker:"Segundo turno da eleição presidencial no Brasil", title:"Acompanhamento da apuração", sub:"Domingo, 25 de outubro de 2026. Apuração ao vivo comparada com o segundo turno final de 2022.",
+ btnDemo:"Demonstração", btnLive:"Ao vivo (TSE)", pairLabel:"Lado de Lula em 2022", pairAria:"Qual candidato representa o lado de Lula em 2022",
+ codeLabel:"Código da eleição", codePh:"ex.: 6257", btnStart:"Iniciar", btnTest:"Testar com o primeiro turno (6257)", btnFind:"Buscar código",
+ liveHint:"Não sabe o código? Toque em Buscar código. Ou digite o código do segundo turno, toque em Iniciar e mantenha esta página aberta. Ela consulta o arquivo nacional, os 27 estados e o exterior a cada 45 segundos e preenche cada área assim que os números aparecem.",
+ healthTitle:"Status da atualização", btnNow:"Verificar agora", hLastL:"Última verificação", hChangeL:"Última mudança nos números", hNextL:"Próxima verificação", hFilesL:"Arquivos lidos com sucesso",
+ chip:"Nacional", tkLabel:"Final de 2022: Lula {a}, Bolsonaro {b}", tickTitle:"Resultado de 2022", counted:"Seções apuradas",
+ mapTitle:"Visão geral dos estados", mapLegend:"{r}Lado de Lula na frente{b}Outro candidato na frente<br>Um tom mais forte indica vantagem maior. O número é o percentual de quem lidera. Cinza significa que ainda não há dados.",
+ leadL:"À frente no país", wonL:"Estados à frente (com dados)", wonNote:"2022: o lado de Lula venceu em 13 de 27 estados, além do exterior", repL:"Áreas com dados", repNote:"27 estados mais o exterior",
+ overseasTitle:"Votos no exterior", byCountry:"Por país", countryLabel:"País", countryAria:"Filtrar votos do exterior por país", allOverseas:"Todo o exterior",
+ cnoteInit:"Os países aparecem quando os votos do exterior começarem a chegar.",
+ stateByState:"Estado por estado", sortLabel:"Ordenar", sortArrival:"Com dados primeiro", sortAz:"De A a Z", sortSwing:"Maior variação",
+ colState:"Estado", colCounted:"Apurado", colSplit:"Divisão ao vivo", colLive:"Resultado ao vivo", col2022:"2022", colSwing:"Variação",
+ citiesTitle:"Cidades por estado", stateLabel:"Estado", chooseState:"Escolha um estado", searchPh:"Buscar cidade", searchAria:"Buscar cidade",
+ cityNoteInit:"Escolha um estado ou toque em um estado no mapa. As cidades são carregadas apenas para o estado escolhido, para respeitar os limites do TSE.",
+ footDemo:"Os números da demonstração são aleatórios e não são resultados reais.",
+ waiting:"aguardando", noVotesYet:"sem votos ainda", votesN:"{n} votos", ptsVs:"pts em relação a 2022",
+ dayOne:"Falta {n} dia para o segundo turno", dayMany:"Faltam {n} dias para o segundo turno", votingDay:"Dia de votação: urnas abertas", pollsClosed:"Votação encerrada",
+ legendTxt:"O traço branco marca a participação de {l} em 2022 naquela área. A variação é a mudança na participação de {l} em relação a 2022: {pos} favorece {l}, {neg} favorece {r}.",
+ leadNote:"por {m} pts (margem em 2022: {m22})", repTxt:"{n} de 28", wonTxt:"{name} {a} de {b}",
+ tileWait:"{name}: aguardando dados", tileTip:"{name}: {l} {lp}%, {r} {rp}% (2022: {ref}% para o lado de Lula)",
+ statusDemo:"Demonstração (simulada)", statusDemoDone:"Demonstração concluída", logDemo:"Modo demonstração: os números são simulados e mudam a cada {n} segundos.",
+ footDemoOverseas:"Os números da demonstração são aleatórios e não são resultados reais. O exterior aparece primeiro e depois os estados entram um a um.",
+ candA:"Candidato A", candB:"Candidato B", candN:"Candidato {n}", demoCity:"Cidade fictícia {n}",
+ statusChoose:"Escolha um modo", statusEnter:"Digite um código e toque em Iniciar", statusConnecting:"Conectando...", statusLive:"Ao vivo do TSE, atualizado às {time}",
+ statusWaiting:"Aguardando dados...", statusStopped3:"Interrompido após 3 erros", statusLayout:"Interrompido: formato de arquivo inesperado",
+ msgHidden:"O TSE mostra zero voto até o fim da votação, às 17h (horário de Brasília). Os números aparecerão sozinhos. ",
+ msgManyMiss:"Muitos arquivos de áreas ainda não foram publicados. Aguardando 3 minutos antes de verificar de novo, para respeitar os limites do TSE.",
+ msgSomeMiss:"{n} arquivo(s) de área ainda indisponível(is). Serão preenchidos automaticamente.",
+ msgNoNet:"Seu navegador não conseguiu acessar o TSE (sem internet ou o navegador bloqueou a solicitação). ",
+ msgLayoutTail:" Envie esta mensagem para que eu possa corrigir o leitor.",
+ msgStopTail:" Interrompido para evitar bloqueio pelo TSE. Confira o código e toque em Iniciar novamente.",
+ msgRetryTail:" O arquivo nacional pode ainda não ter sido publicado. Nova tentativa em 60 segundos.",
+ msgCodeFirst:"Digite primeiro o código da eleição (somente números).", msgCheckNow:"Verificar agora funciona no modo ao vivo, depois de tocar em Iniciar.", msgFilled:"Código {code} preenchido. Toque em Iniciar.",
+ errStatus:"O TSE respondeu com o status {s}.", errLayout:"Formato de arquivo inesperado. Campos encontrados: {f}", errNoCand:"O arquivo ainda não tem candidatos.",
+ errPlaces:"Formato inesperado da lista de locais. Campos encontrados: {f}", errCities:"Formato inesperado da lista de cidades. Campos encontrados: {f}",
+ logStart:"Iniciado. Consultando o TSE para o código de eleição {code}.", logReadYes:"{ok} de {tot} arquivos lidos. Os números mudaram.", logReadNo:"{ok} de {tot} arquivos lidos. Sem mudança desde a última verificação.",
+ logProblem:"Problema: {msg}", logManual:"Verificação manual.",
+ footLive:"Dados ao vivo: arquivos oficiais de resultado do TSE para o código de eleição {code}. Os nomes vêm dos arquivos. Os números estaduais de 2022 foram compilados de apurações publicadas.",
+ hDemoLast:"Demonstração (dados fictícios)", hDemoChange:"A cada {n} s", checking:"verificando...", noDataYet:"sem dados ainda", notYet:"ainda não", agoS:"há {n} s", agoM:"há {n} min", secS:"{n} s", hFilesTxt:"{ok} de {tot}",
+ otherPlaces:"Outros locais", cnoteTxt:"{c} países, {p} locais, {r} com dados. Clique em um país para ver seus locais. O traço branco marca o total do exterior em 2022 ({ref}% para o lado de Lula); não há números de 2022 por país.",
+ colPlace:"Local", colCountry:"País", colVotes:"Votos", place1:"{n} local", placeN:"{n} locais", allPlaces:"todos os locais", cntErr:"Detalhamento por país indisponível: {msg}",
+ citiesErr:"Lista de cidades indisponível: {msg}", loadingCities:"Carregando cidades de {name}...", noVotesState:"{name} ainda não tem votos. As cidades serão carregadas assim que o estado começar a apurar.",
+ cityNote:"{name}: {n} cidades, {r} com dados. O traço branco marca o resultado do estado em 2022 ({ref}% para o lado de Lula); não há números de 2022 por cidade.",
+ cityMore:" Mostrando as 150 maiores de {n}; use a busca para ver as demais.", colCity:"Cidade", pctCounted:"{n}% apurado",
+ findLooking:"Consultando a lista de eleições do TSE...", findNone:"Nada reconhecível encontrado. Abra {link} e procure a eleição presidencial com o segundo turno.", findLink:"a lista do TSE",
+ findPrompt:"Procure o segundo turno da eleição presidencial e toque nele:", findCode:"código {c}", findErr:"Não foi possível ler a lista: {msg}. Ela pode ainda não ter sido publicada.",
+ resTxt:"{l} a {r}", featCounted:"Apurado {cc}. Exterior em 2022: {x}% para o lado de Lula.",
+ nav1:"Visão geral", nav2:"Estados", nav3:"Exterior", nav4:"Cidades", heroSub:"Percentual dos votos válidos apurados até agora",
+ trendTitle:"Participação ao longo do tempo", trendSub:"Percentual de votos válidos de {l} a cada atualização. Linhas tracejadas: 50% e o resultado final de 2022.", trendEmpty:"O gráfico começa quando chegarem os primeiros votos.",
+ swingTitle:"Variação em relação a 2022 por estado", swingSub:"Mudança na participação de {l}, em pontos. Vermelho favorece {l}, azul favorece {r}.", swingEmpty:"Nenhum estado com dados ainda.",
+ btnExport:"Exportar CSV", themeAria:"Alternar entre tema claro e escuro"
+},
+es: {
+ docTitle:"Seguimiento de la segunda vuelta - 25 de octubre de 2026", langLabel:"Idioma",
+ kicker:"Segunda vuelta de las elecciones presidenciales de Brasil", title:"Seguimiento de la noche electoral", sub:"Domingo, 25 de octubre de 2026. Recuento en directo comparado con la segunda vuelta final de 2022.",
+ btnDemo:"Demostración", btnLive:"En directo (TSE)", pairLabel:"Bando de Lula en 2022", pairAria:"Qué candidato representa el bando de Lula en 2022",
+ codeLabel:"Código de la elección", codePh:"p. ej. 6257", btnStart:"Iniciar", btnTest:"Probar con la primera vuelta (6257)", btnFind:"Buscar código",
+ liveHint:"¿No sabes el código? Pulsa Buscar código. Si no, escribe el código de la segunda vuelta, pulsa Iniciar y deja esta página abierta. Consulta el archivo nacional, los 27 estados y el extranjero cada 45 segundos y rellena cada zona en cuanto aparecen sus datos.",
+ healthTitle:"Estado de la actualización", btnNow:"Comprobar ahora", hLastL:"Última comprobación", hChangeL:"Último cambio en las cifras", hNextL:"Próxima comprobación", hFilesL:"Archivos leídos correctamente",
+ chip:"Todo el país", tkLabel:"Final de 2022: Lula {a}, Bolsonaro {b}", tickTitle:"Resultado de 2022", counted:"Mesas escrutadas",
+ mapTitle:"Los estados de un vistazo", mapLegend:"{r}Gana el bando de Lula{b}Gana el otro candidato<br>Un tono más intenso indica una ventaja mayor. El número es el porcentaje del que va ganando. El gris significa que aún no hay datos.",
+ leadL:"Por delante a nivel nacional", wonL:"Estados por delante (con datos)", wonNote:"2022: el bando de Lula ganó en 13 de 27 estados, además del extranjero", repL:"Zonas con datos", repNote:"27 estados más el extranjero",
+ overseasTitle:"Voto en el extranjero", byCountry:"Por país", countryLabel:"País", countryAria:"Filtrar el voto del extranjero por país", allOverseas:"Todo el extranjero",
+ cnoteInit:"Los países aparecerán cuando empiecen a llegar los votos del extranjero.",
+ stateByState:"Estado por estado", sortLabel:"Ordenar", sortArrival:"Primero los que ya tienen datos", sortAz:"De la A a la Z", sortSwing:"Mayor variación",
+ colState:"Estado", colCounted:"Escrutado", colSplit:"Reparto en directo", colLive:"Resultado en directo", col2022:"2022", colSwing:"Variación",
+ citiesTitle:"Ciudades por estado", stateLabel:"Estado", chooseState:"Elige un estado", searchPh:"Buscar ciudad", searchAria:"Buscar ciudad",
+ cityNoteInit:"Elige un estado o toca un estado en el mapa. Las ciudades se cargan solo para el estado elegido, para respetar los límites del TSE.",
+ footDemo:"Las cifras de la demostración son aleatorias y no son resultados reales.",
+ waiting:"en espera", noVotesYet:"aún sin votos", votesN:"{n} votos", ptsVs:"pts respecto a 2022",
+ dayOne:"Falta {n} día para la segunda vuelta", dayMany:"Faltan {n} días para la segunda vuelta", votingDay:"Día de votación: colegios abiertos", pollsClosed:"Votación cerrada",
+ legendTxt:"La marca blanca indica el porcentaje de {l} en 2022 en esa zona. La variación es el cambio en el porcentaje de {l} respecto a 2022: {pos} favorece a {l}, {neg} favorece a {r}.",
+ leadNote:"por {m} pts (diferencia en 2022: {m22})", repTxt:"{n} de 28", wonTxt:"{name} {a} de {b}",
+ tileWait:"{name}: a la espera de datos", tileTip:"{name}: {l} {lp}%, {r} {rp}% (2022: {ref}% para el bando de Lula)",
+ statusDemo:"Demostración (simulada)", statusDemoDone:"Demostración terminada", logDemo:"Modo demostración: las cifras son simuladas y cambian cada {n} segundos.",
+ footDemoOverseas:"Las cifras de la demostración son aleatorias y no son resultados reales. Primero informa el extranjero y luego se van sumando los estados.",
+ candA:"Candidato A", candB:"Candidato B", candN:"Candidato {n}", demoCity:"Ciudad de prueba {n}",
+ statusChoose:"Elige un modo", statusEnter:"Escribe un código y pulsa Iniciar", statusConnecting:"Conectando...", statusLive:"En directo del TSE, actualizado a las {time}",
+ statusWaiting:"Esperando datos...", statusStopped3:"Detenido tras 3 errores", statusLayout:"Detenido: formato de archivo inesperado",
+ msgHidden:"El TSE muestra cero votos hasta que termina la votación, a las 17:00 (hora de Brasilia). Las cifras aparecerán solas. ",
+ msgManyMiss:"Muchos archivos de zonas aún no están publicados. Esperando 3 minutos antes de volver a comprobar, para respetar los límites del TSE.",
+ msgSomeMiss:"{n} archivo(s) de zona aún no disponible(s). Se rellenarán automáticamente.",
+ msgNoNet:"Tu navegador no ha podido conectar con el TSE (sin internet o el navegador bloqueó la petición). ",
+ msgLayoutTail:" Envíame este mensaje para que pueda corregir el lector.",
+ msgStopTail:" Detenido para evitar que el TSE te bloquee. Revisa el código y pulsa Iniciar de nuevo.",
+ msgRetryTail:" Puede que el archivo nacional aún no esté publicado. Nuevo intento en 60 segundos.",
+ msgCodeFirst:"Escribe primero el código de la elección (solo números).", msgCheckNow:"Comprobar ahora funciona en el modo en directo, después de pulsar Iniciar.", msgFilled:"Código {code} rellenado. Pulsa Iniciar.",
+ errStatus:"El TSE respondió con el estado {s}.", errLayout:"Formato de archivo inesperado. Campos encontrados: {f}", errNoCand:"El archivo aún no tiene candidatos.",
+ errPlaces:"Formato inesperado de la lista de lugares. Campos encontrados: {f}", errCities:"Formato inesperado de la lista de ciudades. Campos encontrados: {f}",
+ logStart:"Iniciado. Consultando el TSE para el código de elección {code}.", logReadYes:"Leídos {ok} de {tot} archivos. Las cifras han cambiado.", logReadNo:"Leídos {ok} de {tot} archivos. Sin cambios desde la última comprobación.",
+ logProblem:"Problema: {msg}", logManual:"Comprobación manual.",
+ footLive:"Datos en directo: archivos oficiales de resultados del TSE para el código de elección {code}. Los nombres salen de los archivos. Las cifras estatales de 2022 se han recopilado de recuentos publicados.",
+ hDemoLast:"Demostración (datos ficticios)", hDemoChange:"Cada {n} s", checking:"comprobando...", noDataYet:"sin datos aún", notYet:"todavía no", agoS:"hace {n} s", agoM:"hace {n} min", secS:"{n} s", hFilesTxt:"{ok} de {tot}",
+ otherPlaces:"Otros lugares", cnoteTxt:"{c} países, {p} lugares, {r} con datos. Haz clic en un país para ver sus lugares. La marca blanca indica el total del extranjero en 2022 ({ref}% para el bando de Lula); no se incluyen cifras de 2022 por país.",
+ colPlace:"Lugar", colCountry:"País", colVotes:"Votos", place1:"{n} lugar", placeN:"{n} lugares", allPlaces:"todos los lugares", cntErr:"Desglose por país no disponible: {msg}",
+ citiesErr:"Lista de ciudades no disponible: {msg}", loadingCities:"Cargando las ciudades de {name}...", noVotesState:"{name} aún no tiene votos. Sus ciudades se cargan en cuanto el estado empiece a informar.",
+ cityNote:"{name}: {n} ciudades, {r} con datos. La marca blanca indica el resultado del estado en 2022 ({ref}% para el bando de Lula); no se incluyen cifras de 2022 por ciudad.",
+ cityMore:" Se muestran las 150 mayores de {n}; usa el buscador para el resto.", colCity:"Ciudad", pctCounted:"{n}% escrutado",
+ findLooking:"Consultando la lista de elecciones del TSE...", findNone:"No se ha encontrado nada reconocible. Abre {link} y busca la elección presidencial con la segunda vuelta.", findLink:"la lista del TSE",
+ findPrompt:"Busca la segunda vuelta de la elección presidencial y tócala:", findCode:"código {c}", findErr:"No se pudo leer la lista: {msg}. Puede que aún no esté publicada.",
+ resTxt:"{l} a {r}", featCounted:"Escrutado {cc}. Extranjero en 2022: {x}% para el bando de Lula.",
+ nav1:"Resumen", nav2:"Estados", nav3:"Extranjero", nav4:"Ciudades", heroSub:"Porcentaje de votos válidos escrutados hasta ahora",
+ trendTitle:"Evolución del porcentaje", trendSub:"Porcentaje de votos válidos de {l} en cada actualización. Líneas discontinuas: 50% y el resultado final de 2022.", trendEmpty:"El gráfico empieza cuando llegan los primeros votos.",
+ swingTitle:"Variación respecto a 2022 por estado", swingSub:"Cambio en el porcentaje de {l}, en puntos. El rojo favorece a {l}, el azul favorece a {r}.", swingEmpty:"Ningún estado informa todavía.",
+ btnExport:"Exportar CSV", themeAria:"Cambiar entre tema claro y oscuro"
+}
+};
+function T(k, v){
+  var s = DICT[LANG] && DICT[LANG][k];
+  if (s == null) s = DICT.en[k];
+  if (s == null) return k;
+  return s.replace(/\{(\w+)\}/g, function(m, n){ return v && v[n] != null ? v[n] : m; });
+}
+function fx(n, d){ return Number(n).toLocaleString(NUMLOC, { minimumFractionDigits:d, maximumFractionDigits:d }); }
+var REGION = {"United States":"US","Portugal":"PT","Spain":"ES","France":"FR","French Guiana":"GF","United Kingdom":"GB","Germany":"DE","Italy":"IT","Switzerland":"CH","Netherlands":"NL","Belgium":"BE","Austria":"AT","Ireland":"IE","Sweden":"SE","Norway":"NO","Denmark":"DK","Japan":"JP","China":"CN","South Korea":"KR","Australia":"AU","Canada":"CA","Argentina":"AR","Paraguay":"PY","Bolivia":"BO","Uruguay":"UY","Chile":"CL","Peru":"PE","Colombia":"CO","Venezuela":"VE","Mexico":"MX","Israel":"IL","United Arab Emirates":"AE","Qatar":"QA","Saudi Arabia":"SA","Egypt":"EG","Angola":"AO","Mozambique":"MZ","South Africa":"ZA","Suriname":"SR","Guyana":"GY","Russia":"RU","India":"IN","Lebanon":"LB","New Zealand":"NZ","Singapore":"SG","Thailand":"TH","Indonesia":"ID","Malaysia":"MY","Philippines":"PH","Vietnam":"VN","Turkey":"TR","Greece":"GR","Poland":"PL","Czechia":"CZ","Hungary":"HU","Finland":"FI","Ghana":"GH","Nigeria":"NG","Morocco":"MA","Kenya":"KE","Ecuador":"EC","Costa Rica":"CR","Panama":"PA","Cuba":"CU","Dominican Republic":"DO","Haiti":"HT","Guatemala":"GT","Jamaica":"JM"};
+var DN = {};
+function cname(k){
+  if (k === "Other places") return T("otherPlaces");
+  var cc = REGION[k]; if (!cc) return k;
+  try { DN[LOCALE_TAG] = DN[LOCALE_TAG] || new Intl.DisplayNames([LOCALE_TAG], { type:"region" }); return DN[LOCALE_TAG].of(cc) || k; } catch (e) { return k; }
+}
+function setLangVars(l){ LANG = DICT[l] ? l : "en"; LOCALE_TAG = { en:"en-US", pt:"pt-BR", es:"es-ES" }[LANG]; NUMLOC = LOCALE_TAG; }
+function applyStatic(){
+  document.documentElement.lang = LOCALE_TAG; document.title = T("docTitle");
+  [].forEach.call(document.querySelectorAll("[data-i]"), function(e){ e.textContent = T(e.dataset.i); });
+  [].forEach.call(document.querySelectorAll("[data-ph]"), function(e){ e.placeholder = T(e.dataset.ph); });
+  [].forEach.call(document.querySelectorAll("[data-al]"), function(e){ e.setAttribute("aria-label", T(e.dataset.al)); });
+  [].forEach.call(document.querySelectorAll("[data-ti]"), function(e){ e.title = T(e.dataset.ti); });
+  $("maplegend").innerHTML = T("mapLegend", { r:'<span class="sw" style="background:var(--lula);margin-left:0"></span>', b:'<span class="sw" style="background:var(--flavio)"></span>' });
+  $("tklabel").textContent = T("tkLabel", { a:fx(50.9, 2), b:fx(49.1, 2) });
+}
+function initLang(){
+  var saved = null; try { saved = localStorage.getItem("lang"); } catch (e) {}
+  var nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+  setLangVars(saved || (nav === "pt" || nav === "es" ? nav : "en"));
+  $("lang").value = LANG; applyStatic();
+}
+function setLang(l){
+  setLangVars(l); try { localStorage.setItem("lang", LANG); } catch (e) {}
+  applyStatic(); paintStatus(); paintMsg(); paintFoot(); renderLogs();
+  if (mode === "demo"){
+    FIN.forEach(function(k){ if (k.key === "A") k.name = T("candA"); if (k.key === "B") k.name = T("candB"); }); fillPair();
+    Object.keys(CITYLIST).forEach(function(uf){ CITYLIST[uf].forEach(function(c, i){ if (/^d/.test(c.cd)) c.name = T("demoCity", { n:i + 1 }); }); });
+  }
+  build(); populateStates(); $("country").dataset.sig = ""; countdown(); updateHealth(); render();
+}
+
+
+var $ = function(id){ return document.getElementById(id); };
+var S = {}, NAT = null, FIN = [], pairKey = null, userPicked = false;
+var timer = null, mode = null, fails = 0, ROW = {};
+
+/* ---------- Helpers ---------- */
+function num(t){ return parseFloat(String(t).replace(",", ".")); }
+function nice(s){ return String(s).toLowerCase().replace(/(^|\s)\S/g, function(c){ return c.toUpperCase(); }); }
+function f2(n){ return fx(n, 2); }
+function votesTxt(n){ return T("votesN", { n: Math.round(n).toLocaleString(NUMLOC) }); }
+var MSG = null, STAT = { k:"statusChoose", v:null, on:false }, FOOT = { k:"footDemo", v:null };
+function setMsg(a, v){ MSG = !a ? null : (Array.isArray(a) ? a : [[a, v]]); paintMsg(); }
+function paintMsg(){ $("msg").textContent = MSG ? MSG.map(function(p){ return p[0].charAt(0) === "=" ? p[0].slice(1) : T(p[0], p[1]); }).join("") : ""; }
+function setStatus(k, on, v){ STAT = { k:k, v:v, on:on }; paintStatus(); }
+function paintStatus(){ $("status").textContent = T(STAT.k, STAT.v); $("dot").className = "dot" + (STAT.on ? "" : " off"); }
+function setFoot(k, v){ FOOT = { k:k, v:v }; paintFoot(); }
+function paintFoot(){ $("foot").textContent = T(FOOT.k, FOOT.v); }
+function populateStates(){
+  var cur = $("state").value;
+  $("state").innerHTML = '<option value="">' + esc(T("chooseState")) + "</option>" + AREAS.slice(1).slice().sort(function(a, b){ return a[1].localeCompare(b[1]); }).map(function(a){ return '<option value="' + a[0] + '">' + a[1] + "</option>"; }).join("");
+  $("state").value = cur;
+}
+function stop(){ if (timer) clearTimeout(timer); timer = null; }
+function sides(){
+  var l = FIN.filter(function(k){ return k.key === pairKey; })[0] || FIN[0] || { key:"A", name:T("candA") };
+  var r = FIN.filter(function(k){ return k.key !== l.key; })[0] || { key:"B", name:T("candB") };
+  return { l:l, r:r };
+}
+/* share of valid votes for the two sides in one data block */
+function share(a){
+  if (!a) return null;
+  var s = sides(), lv = a.v[s.l.key] || 0, rv = a.v[s.r.key] || 0, t = a.total || (lv + rv);
+  if (!(t > 0)) return null;
+  return { l: lv / t * 100, r: rv / t * 100, lv: lv, rv: rv };
+}
+function swingHtml(d, own){
+  if (d == null) return "-";
+  /* red = moves toward the Lula side, blue = moves toward the other side */
+  return '<span class="' + ((d >= 0) === (own !== "r") ? "pos" : "neg") + '">' + (d >= 0 ? "+" : "") + fx(d, 1) + "</span>";
+}
+
+/* ---------- Countdown ---------- */
+function countdown(){
+  var open = Date.UTC(2026,9,25,11,0,0), close = Date.UTC(2026,9,25,20,0,0), now = Date.now(), t;
+  if (now < open){ var d = Math.ceil((open - now) / 864e5); t = T(d === 1 ? "dayOne" : "dayMany", { n: d }); }
+  else if (now < close) t = T("votingDay");
+  else t = T("pollsClosed");
+  $("count").textContent = t;
+}
+
+/* ---------- Build the page once ---------- */
+function rowHtml(a, feat){
+  return '<div class="' + (feat ? "featrow" : "srow wait") + '" id="r-' + a[0] + '">' +
+    (feat ? '' : '<div><b>' + a[0].toUpperCase() + '</b><span class="n">' + a[1] + '</span></div><div class="num cc">' + T("waiting") + '</div>') +
+    '<div class="bar"><i></i><span class="mid"></span><span class="tick" style="left:' + a[2] + '%" title="2022: ' + fx(a[2], 2) + '%"></span></div>' +
+    (feat ? '<div class="num nums">' + T("waiting") + '</div><div class="num sw">-</div>' : '<div class="num nums">-</div><div class="num ref">' + fx(a[2], 1) + '%</div><div class="num sw">-</div>') +
+    '</div>';
+}
+function build(){
+  $("featbox").innerHTML = '<div class="label" style="margin-bottom:10px">' + T("featCounted", { cc: '<b class="cc" id="zzcc">' + T("waiting") + '</b>', x: fx(AREAS[0][2], 2) }) + '</div>' + rowHtml(AREAS[0], true);
+  $("rows").innerHTML = AREAS.slice(1).map(function(a){ return rowHtml(a, false); }).join("");
+  AREAS.forEach(function(a){
+    var el = $("r-" + a[0]);
+    ROW[a[0]] = { root: el, fill: el.querySelector(".bar i"), nums: el.querySelector(".nums"), sw: el.querySelector(".sw"), cc: a[0] === "zz" ? $("zzcc") : el.querySelector(".cc") };
+  });
+}
+
+/* ---------- Paint ---------- */
+function paintArea(a){
+  var r = ROW[a[0]], d = S[a[0]], p = share(d);
+  if (!p){
+    r.fill.style.width = "0"; r.nums.textContent = d ? T("noVotesYet") : T("waiting"); r.sw.textContent = "-";
+    r.root.classList.add("wait");
+    r.cc.textContent = d ? fx(d.counted, 1) + "%" : T("waiting");
+    return;
+  }
+  r.root.classList.remove("wait");
+  r.fill.style.width = p.l + "%";
+  r.nums.textContent = T("resTxt", { l: fx(p.l, 1), r: fx(p.r, 1) });
+  r.sw.innerHTML = swingHtml(p.l - a[2]);
+  r.cc.textContent = fx(d.counted, 1) + "%";
+}
+function render(){
+  var s = sides(), ln = nice(s.l.name), rn = nice(s.r.name);
+  $("legend").innerHTML = '<span class="sw" style="background:var(--lula)"></span>' + esc(ln) + '   <span class="sw" style="background:var(--flavio)"></span>' + esc(rn) + "   " +
+    T("legendTxt", { l: esc(ln), r: esc(rn), pos: "<span class='pos'>+</span>", neg: "<span class='neg'>-</span>" });
+  /* national */
+  var p = share(NAT), nc = NAT ? NAT.counted : 0;
+  var lp = p ? p.l : 0, rp = p ? p.r : 0;
+  $("n1").textContent = ln; $("n2").textContent = rn;
+  $("p1").textContent = f2(lp) + "%"; $("p2").textContent = f2(rp) + "%";
+  $("v1").textContent = p ? votesTxt(p.lv) : T("noVotesYet"); $("v2").textContent = p ? votesTxt(p.rv) : T("noVotesYet");
+  $("b1").style.width = lp + "%"; $("b2").style.width = rp + "%";
+  $("s1").innerHTML = p ? swingHtml(lp - L22) + " " + T("ptsVs") : ""; $("s2").innerHTML = p ? swingHtml(rp - (100 - L22), "r") + " " + T("ptsVs") : "";
+  $("c1").className = "cand" + (p && lp >= rp ? " lead" : ""); $("c2").className = "cand" + (p && rp > lp ? " lead" : "");
+  $("ncounted").textContent = fx(nc, 1) + "%"; $("ncbar").style.width = nc + "%";
+  $("tug").className = "tug" + (p ? (lp >= rp ? " leadL" : " leadR") : "");
+  if (p){
+    var m = Math.abs(lp - rp), lead = lp >= rp ? ln : rn;
+    $("lead").textContent = lead; $("leadNote").textContent = T("leadNote", { m: fx(m, 2), m22: fx(MARGIN22, 2) });
+  } else { $("lead").textContent = "-"; $("leadNote").textContent = ""; }
+  /* areas */
+  var rep = 0, ahead = 0, repStates = 0;
+  AREAS.forEach(function(a){
+    paintArea(a);
+    var q = share(S[a[0]]);
+    if (q){ rep++; if (a[0] !== "zz"){ repStates++; if (q.l > q.r) ahead++; } }
+  });
+  $("rep").textContent = T("repTxt", { n: rep });
+  $("won").textContent = repStates ? T("wonTxt", { name: ln, a: ahead, b: repStates }) : "-";
+  sortRows();
+  renderCountries();
+  renderTiles();
+  renderCities();
+  drawTrend();
+  drawSwing();
+}
+function sortRows(){
+  var how = $("sort").value, list = AREAS.slice(1);
+  function sw(a){ var q = share(S[a[0]]); return q ? Math.abs(q.l - a[2]) : -1; }
+  function cnt(a){ var q = share(S[a[0]]); return q ? S[a[0]].counted : -1; }
+  list.sort(function(x, y){
+    if (how === "az") return x[1].localeCompare(y[1]);
+    if (how === "swing") return sw(y) - sw(x) || x[1].localeCompare(y[1]);
+    return cnt(y) - cnt(x) || x[1].localeCompare(y[1]);
+  });
+  var box = $("rows");
+  list.forEach(function(a){ box.appendChild(ROW[a[0]].root); });
+}
+function fillPair(){
+  var sel = $("pair"); sel.innerHTML = "";
+  FIN.forEach(function(k){ var o = document.createElement("option"); o.value = k.key; o.textContent = nice(k.name); if (k.key === pairKey) o.selected = true; sel.appendChild(o); });
+}
+function setFinalists(list){
+  var changed = FIN.length !== list.length || FIN.some(function(k, i){ return k.key !== list[i].key; });
+  FIN = list;
+  if (!userPicked){
+    var f = FIN.filter(function(k){ return /lula/i.test(k.name); })[0];
+    if (f) pairKey = f.key;
+    else if (!FIN.some(function(k){ return k.key === pairKey; })) pairKey = FIN[0].key;
+  }
+  if (changed) fillPair();
+}
+function reset(){ S = {}; NAT = null; FIN = []; pairKey = null; userPicked = false; fails = 0; LOC = []; LS = {}; locPause = 0; cSel = ""; HIST = []; CS = {}; CITYLIST = {}; CFG = null; cityPause = 0; cityBusy = false; fillPair(); render(); }
+
+/* ---------- Demo mode ---------- */
+function startDemo(){
+  stop(); setMsg(""); mode = "demo"; reset(); liveCode = null; nextAt = 0; busy = false; logLine("logDemo", { n: DEMO_SECONDS });
+  setFoot("footDemoOverseas");
+  setFinalists([{ key:"A", name:T("candA") }, { key:"B", name:T("candB") }]); pairKey = "A"; fillPair();
+  var swing = (Math.random() - 0.5) * 6, g = function(){ return (Math.random() + Math.random() + Math.random() - 1.5) * 2; };
+  var D = AREAS.map(function(a, i){ return { uf:a[0], w:a[3], fin:Math.min(96, Math.max(4, a[2] + swing + g() * 2.2)), start: i === 0 ? 0 : 2 + Math.floor(Math.random() * 16), c:0 }; });
+  var DL = [["MIAMI","United States",35],["BOSTON","United States",30],["NOVA YORK","United States",18],["LISBOA","Portugal",45],["PORTO","Portugal",15],["PARIS","France",20],["LONDRES","United Kingdom",20],["TOQUIO","Japan",14],["NAGOIA","Japan",12],["MADRI","Spain",12],["ROMA","Italy",10],["BERLIM","Germany",10],["ASSUNCAO","Paraguay",12],["BUENOS AIRES","Argentina",10],["GENEBRA","Switzerland",8],["SIDNEY","Australia",6]].map(function(x, i){
+    return { cd:String(90000 + i), name:nice(x[0]), country:x[1], w:x[2] * 1000, fin:Math.min(96, Math.max(4, AREAS[0][2] + swing + g() * 8)), start:Math.floor(Math.random() * 7), c:0 };
+  });
+  LOC = DL.map(function(l){ return { cd:l.cd, name:l.name, country:l.country, n:norm(l.name) }; });
+  var n = 0;
+  setStatus("statusDemo", true);
+  (function tick(){
+    var tw = 0, sw = 0, la = 0, lb = 0, done = true;
+    var zc = 0, zw = 0, za = 0, zb = 0;
+    DL.forEach(function(l){
+      if (n >= l.start && l.c < 100) l.c = Math.min(100, l.c + 4 + Math.random() * 7);
+      if (l.c < 100) done = false;
+      var lf = 1 - l.c / 100, sh = l.c >= 100 ? l.fin : l.fin + (Math.random() - 0.5) * 10 * lf;
+      var tot = l.w * l.c / 100, a = tot * sh / 100, b = tot - a;
+      LS[l.cd] = { counted: l.c, v: { A:a, B:b }, total: tot };
+      zc += l.w * l.c; zw += l.w; za += a; zb += b;
+    });
+    S.zz = { counted: zc / zw, v: { A:za, B:zb }, total: za + zb };
+    D.forEach(function(d){
+      if (d.uf === "zz"){ tw += d.w; sw += d.w * S.zz.counted; la += za; lb += zb; return; }
+      if (n >= d.start && d.c < 100) d.c = Math.min(100, d.c + 3 + Math.random() * 6);
+      if (d.c < 100) done = false;
+      var left = 1 - d.c / 100, sh = d.c >= 100 ? d.fin : d.fin + (Math.random() - 0.5) * 8 * left;
+      var tot = d.w * 1e6 * d.c / 100, a = tot * sh / 100, b = tot - a;
+      S[d.uf] = { counted: d.c, v: { A:a, B:b }, total: tot };
+      tw += d.w; sw += d.w * d.c; la += a; lb += b;
+    });
+    NAT = { counted: sw / tw, v: { A:la, B:lb }, total: la + lb };
+    demoCities();
+    render();
+    n++;
+    if (done) { setStatus("statusDemoDone", false); return; }
+    timer = setTimeout(tick, DEMO_SECONDS * 1000);
+  })();
+}
+
+/* ---------- Live mode ---------- */
+function urlFor(code, uf){ return TSE_BASE + code + "/dados/" + uf + "/" + uf + "-c0001-e" + code.padStart(6, "0") + "-u.json"; }
+function getJSON(u){
+  return fetch(u, { cache:"no-store" }).then(function(r){
+    if (!r.ok){ var e = new Error(T("errStatus", { s: r.status })); e.status = r.status; throw e; }
+    return r.json();
+  });
+}
+function parse(d){
+  if (!d || !Array.isArray(d.carg)){
+    var e = new Error(T("errLayout", { f: Object.keys(d || {}).join(", ") }));
+    e.layout = true; throw e;
+  }
+  /* TSE layout: carg > agr > par > cand. Counted percentage lives in s.pst. */
+  var v = {}, names = {}, t = 0;
+  d.carg.forEach(function(c){ (c.agr || []).forEach(function(g){ (g.par || []).forEach(function(p){ (p.cand || []).forEach(function(x){
+    var k = String(x.n), n = parseInt(x.vap || "0", 10) || 0;
+    v[k] = n; names[k] = x.nmu || x.nm || T("candN", { n: k }); t += n;
+  }); }); }); });
+  if (!Object.keys(v).length){ var e2 = new Error(T("errNoCand")); e2.layout = true; throw e2; }
+  return { counted: d.s ? (num(d.s.pst) || 0) : 0, v: v, names: names, total: t, hidden: d.dv === "n" };
+}
+function cycle(code){
+  var misses = 0; busy = true; liveCode = code;
+  getJSON(urlFor(code, "br")).then(function(d){
+    var p = parse(d), keys = Object.keys(p.v);
+    keys.sort(function(a, b){ return p.v[b] - p.v[a]; });
+    setFinalists(keys.slice(0, 2).map(function(k){ return { key:k, name:p.names[k] }; }));
+    NAT = p;
+    /* the national file exists, so the state files should too */
+    return Promise.all(AREAS.map(function(a){
+      return getJSON(urlFor(code, a[0])).then(function(x){ S[a[0]] = parse(x); }).catch(function(){ misses++; });
+    }));
+  }).then(function(){ return loadLocalities(code); }).then(function(){ loadCities(code); }).then(function(){
+    fails = 0; render();
+    var wait = misses > 8 ? 180 : POLL_SECONDS;
+    var parts = []; if (NAT.hidden) parts.push(["msgHidden"]); if (misses > 8) parts.push(["msgManyMiss"]); else if (misses) parts.push(["msgSomeMiss", { n: misses }]);
+    setMsg(parts.length ? parts : null);
+    setStatus("statusLive", true, { time: new Date().toLocaleTimeString(LOCALE_TAG) });
+    timer = setTimeout(function(){ cycle(code); }, wait * 1000);
+    nextAt = Date.now() + wait * 1000; busy = false;
+    var tot = 1 + AREAS.length, sig = JSON.stringify(NAT.v) + "|" + NAT.counted, changed = sig !== H.sig;
+    H.lastOk = new Date(); H.ok = tot - misses; H.total = tot;
+    if (changed){ H.lastChange = new Date(); H.sig = sig; }
+    logLine(changed ? "logReadYes" : "logReadNo", { ok: H.ok, tot: tot });
+  }).catch(function(err){
+    busy = false;
+    if (err.layout){ setStatus("statusLayout", false); setMsg([["=" + err.message], ["msgLayoutTail"]]); return; }
+    fails++; logLine("logProblem", { msg: err.message });
+    var extra = err instanceof TypeError ? [["msgNoNet"]] : [];
+    if (fails >= 3){ setStatus("statusStopped3", false); setMsg(extra.concat([["=" + err.message], ["msgStopTail"]])); }
+    else { setStatus("statusWaiting", false); setMsg(extra.concat([["=" + err.message], ["msgRetryTail"]])); timer = setTimeout(function(){ cycle(code); }, 60000); nextAt = Date.now() + 60000; }
+  });
+}
+function startLive(code){
+  code = String(code || "").trim();
+  if (!/^\d+$/.test(code)){ setMsg("msgCodeFirst"); return; }
+  stop(); mode = "live"; reset(); setMsg(""); H = { ok:0, total:0, lastOk:null, lastChange:null, sig:"" }; LOGS = []; nextAt = 0; liveCode = code; keepAwake(); logLine("logStart", { code: code });
+  setFoot("footLive", { code: code });
+  setStatus("statusConnecting", false);
+  cycle(code);
+}
+
+/* ---------- Tile map of the states ---------- */
+var GRID = {rr:[3,1],ap:[5,1],am:[2,2],pa:[4,2],ma:[5,2],ce:[6,2],rn:[7,2],ac:[1,3],ro:[2,3],mt:[3,3],to:[4,3],pi:[5,3],pe:[6,3],pb:[7,3],ms:[3,4],go:[4,4],df:[5,4],ba:[6,4],al:[7,4],sp:[4,5],mg:[5,5],es:[6,5],se:[7,5],pr:[4,6],rj:[5,6],sc:[4,7],rs:[4,8]};
+var TILE = {};
+function buildTiles(){
+  $("tiles").innerHTML = AREAS.slice(1).map(function(a){
+    var g = GRID[a[0]];
+    return '<div class="tile wait" data-uf="' + a[0] + '" style="grid-column:' + g[0] + ';grid-row:' + g[1] + '"><b>' + a[0].toUpperCase() + '</b><small>-</small></div>';
+  }).join("");
+  AREAS.slice(1).forEach(function(a){ var el = $("tiles").querySelector('[data-uf="' + a[0] + '"]'); TILE[a[0]] = { el: el, sub: el.querySelector("small") }; el.onclick = function(){ $("state").value = a[0]; $("state").onchange(); $("citypanel").scrollIntoView({ behavior:"smooth" }); }; });
+  populateStates();
+}
+function renderTiles(){
+  AREAS.slice(1).forEach(function(a){
+    var t = TILE[a[0]], p = share(S[a[0]]);
+    if (!p){ t.el.className = "tile wait"; t.el.style.background = ""; t.sub.textContent = "-"; t.el.title = T("tileWait", { name: a[1] }); return; }
+    var s = sides(), lead = p.l >= p.r, m = Math.abs(p.l - p.r), pc = Math.round(25 + Math.min(m / 40, 1) * 70);
+    t.el.className = "tile" + (pc >= 55 ? " strong" : "");
+    t.el.style.background = "color-mix(in srgb, var(" + (lead ? "--lula" : "--flavio") + ") " + pc + "%, var(--track))";
+    t.sub.textContent = fx(lead ? p.l : p.r, 1);
+    t.el.title = T("tileTip", { name: a[1], l: nice(s.l.name), lp: fx(p.l, 1), r: nice(s.r.name), rp: fx(p.r, 1), ref: fx(a[2], 1) });
+  });
+}
+
+/* ---------- Overseas by country ---------- */
+var LOC = [], LS = {}, locPause = 0, cSel = "";
+/* Best-effort list of overseas places by country. Places not listed are shown under "Other places". */
+var CITYMAP = "United States:BOSTON,MIAMI,NOVA YORK,NOVA IORQUE,NEW YORK,HOUSTON,LOS ANGELES,SAN FRANCISCO,CHICAGO,ATLANTA,WASHINGTON,ORLANDO,HARTFORD,NEWARK;Portugal:LISBOA,PORTO,FARO;Spain:MADRI,MADRID,BARCELONA;France:PARIS;French Guiana:CAIENA;United Kingdom:LONDRES,LONDON;Germany:BERLIM,FRANKFURT,MUNIQUE,HAMBURGO,BONN;Italy:ROMA,MILAO;Switzerland:BERNA,GENEBRA,ZURIQUE;Netherlands:HAIA,AMSTERDA;Belgium:BRUXELAS;Austria:VIENA;Ireland:DUBLIN;Sweden:ESTOCOLMO;Norway:OSLO;Denmark:COPENHAGUE;Japan:TOQUIO,NAGOIA,HAMAMATSU,OSAKA;China:PEQUIM,XANGAI,CANTAO,HONG KONG;South Korea:SEUL;Australia:CANBERRA,SIDNEY,SYDNEY;Canada:OTAVA,TORONTO,VANCOUVER,MONTREAL;Argentina:BUENOS AIRES;Paraguay:ASSUNCAO,CIUDAD DEL ESTE,PEDRO JUAN,SALTO DEL GUAIRA,ENCARNACION;Bolivia:LA PAZ,SANTA CRUZ,COBIJA;Uruguay:MONTEVIDEU,RIVERA,CHUY;Chile:SANTIAGO;Peru:LIMA;Colombia:BOGOTA;Venezuela:CARACAS;Mexico:CIDADE DO MEXICO;Israel:TEL AVIV;United Arab Emirates:ABU DHABI,DUBAI;Qatar:DOHA;Saudi Arabia:RIAD;Egypt:CAIRO;Angola:LUANDA;Mozambique:MAPUTO;South Africa:PRETORIA,JOHANNESBURGO;Suriname:PARAMARIBO;Guyana:GEORGETOWN;Russia:MOSCOU;India:NOVA DELHI;Lebanon:BEIRUTE;New Zealand:WELLINGTON,AUCKLAND;Singapore:SINGAPURA;Thailand:BANGUECOQUE;Indonesia:JACARTA;Malaysia:KUALA LUMPUR;Philippines:MANILA;Vietnam:HANOI;Turkey:ANCARA,ISTAMBUL;Greece:ATENAS;Poland:VARSOVIA;Czechia:PRAGA;Hungary:BUDAPESTE;Finland:HELSINQUE;Ghana:ACRA;Nigeria:LAGOS,ABUJA;Morocco:RABAT;Kenya:NAIROBI;Ecuador:QUITO;Costa Rica:SAO JOSE;Panama:PANAMA;Cuba:HAVANA;Dominican Republic:SANTO DOMINGO;Haiti:PORTO PRINCIPE;Guatemala:GUATEMALA;Jamaica:KINGSTON";
+var CITY = {};
+CITYMAP.split(";").forEach(function(e){ var p = e.split(":"); p[1].split(",").forEach(function(c){ CITY[c] = p[0]; }); });
+function norm(s){ return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().replace(/[^A-Z0-9 ]/g, " ").replace(/\s+/g, " ").trim(); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]; }); }
+function countryOf(n){ if (CITY[n]) return CITY[n]; for (var k in CITY){ if (n.indexOf(k) === 0) return CITY[k]; } return null; }
+
+function buildLoc(c){
+  var z = (c && Array.isArray(c.abr)) ? c.abr.filter(function(a){ return String(a.cd || a.cdabr || "").toLowerCase() === "zz"; })[0] : null;
+  if (!z || !Array.isArray(z.mu)) throw new Error(T("errPlaces", { f: Object.keys(c || {}).join(", ") }));
+  var list = z.mu.filter(function(m){ return m.cd != null; }).map(function(m){
+    return { cd: String(m.cd).padStart(5, "0"), name: nice(m.nm || m.cd), n: norm(m.nm || "") };
+  });
+  /* If most names are known cities, group by country. Otherwise the names are probably countries already. */
+  var cityList = list.filter(function(l){ return countryOf(l.n); }).length >= list.length * 0.3;
+  list.forEach(function(l){ l.country = countryOf(l.n) || (cityList ? "Other places" : l.name); });
+  return list;
+}
+function locUrl(code, cd){ return TSE_BASE + code + "/dados/zz/zz" + cd + "-c0001-e" + code.padStart(6, "0") + "-u.json"; }
+function loadLocalities(code){
+  if (!share(S.zz)) return Promise.resolve();          /* wait until overseas has votes */
+  var first = LOC.length ? Promise.resolve() : getConfig(code).then(function(c){ LOC = buildLoc(c); });
+  return first.then(function(){
+    if (!LOC.length || Date.now() < locPause) return;
+    var i = 0, miss = 0;
+    function worker(){
+      if (i >= LOC.length) return Promise.resolve();
+      var l = LOC[i++];
+      return getJSON(locUrl(code, l.cd)).then(function(x){ LS[l.cd] = parse(x); }).catch(function(){ miss++; }).then(worker);
+    }
+    var ws = []; for (var k = 0; k < 6; k++) ws.push(worker());      /* 6 requests at a time */
+    return Promise.all(ws).then(function(){ if (miss > 10) locPause = Date.now() + 300000; });
+  }).catch(function(e){ $("cnote").textContent = T("cntErr", { msg: e.message }); });
+}
+function groups(){
+  var g = {};
+  LOC.forEach(function(l){
+    var o = g[l.country] || (g[l.country] = { name:l.country, locs:[], v:{}, total:0 });
+    o.locs.push(l);
+    var d = LS[l.cd];
+    if (d){ Object.keys(d.v).forEach(function(k){ o.v[k] = (o.v[k] || 0) + d.v[k]; }); o.total += d.total; }
+  });
+  return g;
+}
+function crow(name, sub, d, cls, key, ref){
+  var p = share(d);
+  return '<div class="crow ' + cls + (p ? "" : " wait") + '"' + (key != null ? ' data-c="' + esc(key) + '"' : '') + '><div><b>' + esc(name) + '</b><span class="n">' + sub + '</span></div>' +
+    '<div class="num">' + (p ? Math.round(p.lv + p.rv).toLocaleString(NUMLOC) : T("waiting")) + '</div>' +
+    '<div class="bar"><i style="width:' + (p ? p.l : 0) + '%"></i><span class="mid"></span><span class="tick" style="left:' + (ref == null ? AREAS[0][2] : ref) + '%" title="' + esc(T("tickTitle")) + '"></span></div>' +
+    '<div class="num">' + (p ? T("resTxt", { l: fx(p.l, 1), r: fx(p.r, 1) }) : "-") + '</div></div>';
+}
+function renderCountries(){
+  var box = $("cbody"), sel = $("country");
+  if (!LOC.length){ box.innerHTML = ""; sel.innerHTML = '<option value="">' + esc(T("allOverseas")) + '</option>'; sel.dataset.sig = ""; return; }
+  var g = groups(), names = Object.keys(g).sort(function(a, b){ return cname(a).localeCompare(cname(b), LOCALE_TAG); }), sig = names.join("|");
+  if (sel.dataset.sig !== sig){
+    sel.innerHTML = '<option value="">' + esc(T("allOverseas")) + '</option>' + names.map(function(n){ return '<option value="' + esc(n) + '">' + esc(cname(n)) + "</option>"; }).join("");
+    sel.dataset.sig = sig;
+  }
+  if (names.indexOf(cSel) < 0) cSel = "";
+  sel.value = cSel;
+  var reporting = LOC.filter(function(l){ return LS[l.cd] && LS[l.cd].total > 0; }).length;
+  $("cnote").textContent = T("cnoteTxt", { c: names.length, p: LOC.length, r: reporting, ref: fx(AREAS[0][2], 2) });
+  var hd = '<div class="crow hd"><span>' + T(cSel ? "colPlace" : "colCountry") + "</span><span>" + T("colVotes") + "</span><span>" + T("colSplit") + "</span><span>" + T("colLive") + "</span></div>", rows;
+  if (cSel){
+    var o = g[cSel];
+    var list = o.locs.slice().sort(function(a, b){ return ((LS[b.cd] || {}).total || 0) - ((LS[a.cd] || {}).total || 0) || a.name.localeCompare(b.name); });
+    rows = crow(cname(o.name), T("allPlaces"), o, "sel", null) + list.map(function(l){ return crow(l.name, "", LS[l.cd], "", null); }).join("");
+  } else {
+    rows = names.map(function(n){ return g[n]; }).sort(function(a, b){ return b.total - a.total || a.name.localeCompare(b.name); })
+      .map(function(o){ return crow(cname(o.name), T(o.locs.length === 1 ? "place1" : "placeN", { n: o.locs.length }), o, "", o.name); }).join("");
+  }
+  box.innerHTML = hd + rows;
+}
+
+/* ---------- Feed status (how you know it is working) ---------- */
+var LOGS = [], busy = false, liveCode = null, nextAt = 0, wake = null, H = { ok:0, total:0, lastOk:null, lastChange:null, sig:"" };
+function logLine(k, v){ LOGS.unshift({ t: new Date(), k: k, v: v }); LOGS = LOGS.slice(0, 6); renderLogs(); }
+function renderLogs(){ $("log").innerHTML = LOGS.map(function(x){ return "<li>" + esc(x.t.toLocaleTimeString(LOCALE_TAG) + "   " + T(x.k, x.v)) + "</li>"; }).join(""); }
+function ago(d){ var n = Math.round((Date.now() - d) / 1000); return n < 90 ? T("agoS", { n: n }) : T("agoM", { n: Math.round(n / 60) }); }
+function updateHealth(){
+  var set = function(a, b, c, d){ $("hLast").textContent = a; $("hChange").textContent = b; $("hNext").textContent = c; $("hFiles").textContent = d; };
+  $("hLast").style.color = "";
+  if (mode === "demo"){ set(T("hDemoLast"), T("hDemoChange", { n: DEMO_SECONDS }), "-", "-"); return; }
+  if (mode !== "live"){ set("-", "-", "-", "-"); return; }
+  var stale = H.lastOk && !busy && Date.now() - H.lastOk > 3 * POLL_SECONDS * 1000;
+  set(H.lastOk ? H.lastOk.toLocaleTimeString(LOCALE_TAG) + " (" + ago(H.lastOk) + ")" : (busy ? T("checking") : T("noDataYet")),
+      H.lastChange ? H.lastChange.toLocaleTimeString(LOCALE_TAG) + " (" + ago(H.lastChange) + ")" : T("notYet"),
+      busy ? T("checking") : (nextAt ? T("secS", { n: Math.max(0, Math.round((nextAt - Date.now()) / 1000)) }) : "-"),
+      H.total ? T("hFilesTxt", { ok: H.ok, tot: H.total }) : "-");
+  if (stale) $("hLast").style.color = "var(--amber)";
+}
+function keepAwake(){
+  try { if (navigator.wakeLock && !wake) navigator.wakeLock.request("screen").then(function(l){ wake = l; l.addEventListener("release", function(){ wake = null; }); }).catch(function(){}); } catch (e) {}
+}
+document.addEventListener("visibilitychange", function(){
+  if (document.hidden) return;
+  if (mode === "live") keepAwake();
+  /* phones pause timers in the background: check right away when you come back */
+  if (mode === "live" && liveCode && !busy && nextAt && Date.now() >= nextAt){ stop(); cycle(liveCode); }
+});
+
+/* ---------- Cities by state ---------- */
+var CFG = null, CFGcode = null, CS = {}, CITYLIST = {}, cityUF = "", cityBusy = false, cityPause = 0;
+function getConfig(code){
+  if (CFG && CFGcode === code) return Promise.resolve(CFG);
+  return getJSON(TSE_BASE + code + "/config/mun-e" + code.padStart(6, "0") + "-cm.json").then(function(c){ CFG = c; CFGcode = code; return c; });
+}
+function buildCities(c, uf){
+  var z = (c && Array.isArray(c.abr)) ? c.abr.filter(function(a){ return String(a.cd || a.cdabr || "").toLowerCase() === uf; })[0] : null;
+  if (!z || !Array.isArray(z.mu)) throw new Error(T("errCities", { f: Object.keys(c || {}).join(", ") }));
+  return z.mu.filter(function(m){ return m.cd != null; }).map(function(m){ return { cd: String(m.cd).padStart(5, "0"), name: nice(m.nm || m.cd) }; });
+}
+function cityUrl(code, uf, cd){ return TSE_BASE + code + "/dados/" + uf + "/" + uf + cd + "-c0001-e" + code.padStart(6, "0") + "-u.json"; }
+function loadCities(code){
+  if (!cityUF || !share(S[cityUF]) || cityBusy || Date.now() < cityPause) return Promise.resolve();
+  cityBusy = true;
+  var uf = cityUF;
+  return getConfig(code).then(function(c){
+    if (!CITYLIST[uf]) CITYLIST[uf] = buildCities(c, uf);
+    var list = CITYLIST[uf], i = 0, miss = 0;
+    function worker(){
+      if (i >= list.length || uf !== cityUF) return Promise.resolve();
+      var l = list[i++];
+      return getJSON(cityUrl(code, uf, l.cd)).then(function(x){ CS[uf + l.cd] = parse(x); }).catch(function(){ miss++; }).then(worker);
+    }
+    var ws = []; for (var k = 0; k < 8; k++) ws.push(worker());      /* 8 requests at a time */
+    return Promise.all(ws).then(function(){ if (miss > 25) cityPause = Date.now() + 300000; });
+  }).catch(function(e){ $("citynote").textContent = T("citiesErr", { msg: e.message }); })
+    .then(function(){ cityBusy = false; renderCities(); if (uf !== cityUF && mode === "live" && liveCode) loadCities(liveCode); });
+}
+/* Demo mode: invented cities that follow the chosen state's progress */
+function demoCities(){
+  var uf = cityUF, st = uf && S[uf], p = st && share(st);
+  if (!uf || !st) return;
+  if (!CITYLIST[uf]) CITYLIST[uf] = Array.apply(null, Array(14)).map(function(_, i){ return { cd:"d" + i, name:T("demoCity", { n: i + 1 }), w:300000 / (i + 1), off:(Math.random() - 0.5) * 14, r:0.7 + Math.random() * 0.6 }; });
+  CITYLIST[uf].forEach(function(l){
+    var c = Math.min(100, st.counted * l.r), base = p ? p.l : 50, sh = Math.min(96, Math.max(4, base + l.off)), tot = l.w * c / 100;
+    CS[uf + l.cd] = { counted: c, v: { A: tot * sh / 100, B: tot * (100 - sh) / 100 }, total: c > 0 && p ? tot : 0 };
+  });
+}
+function renderCities(){
+  var box = $("ctable"), uf = cityUF;
+  if (!uf){ box.innerHTML = ""; return; }
+  var area = AREAS.filter(function(a){ return a[0] === uf; })[0], list = CITYLIST[uf];
+  if (!list){
+    box.innerHTML = "";
+    $("citynote").textContent = share(S[uf]) ? T("loadingCities", { name: area[1] }) : T("noVotesState", { name: area[1] });
+    return;
+  }
+  var q = norm($("csearch").value);
+  var rows = list.filter(function(l){ return !q || norm(l.name).indexOf(q) >= 0; }).map(function(l){ return { l:l, d:CS[uf + l.cd] }; });
+  rows.sort(function(a, b){ return ((b.d || {}).total || 0) - ((a.d || {}).total || 0) || a.l.name.localeCompare(b.l.name); });
+  var reporting = list.filter(function(l){ var d = CS[uf + l.cd]; return d && d.total > 0; }).length;
+  $("citynote").textContent = T("cityNote", { name: area[1], n: list.length, r: reporting, ref: fx(area[2], 1) }) + (rows.length > 150 ? T("cityMore", { n: rows.length }) : "");
+  box.innerHTML = '<div class="crow hd"><span>' + T("colCity") + '</span><span>' + T("colVotes") + '</span><span>' + T("colSplit") + '</span><span>' + T("colLive") + '</span></div>' +
+    rows.slice(0, 150).map(function(r){ return crow(r.l.name, r.d ? T("pctCounted", { n: fx(r.d.counted, 0) }) : "", r.d, "", null, area[2]); }).join("");
+}
+
+/* ---------- Find the election code ---------- */
+var CONFIG_URL = "https://resultados.tse.jus.br/oficial/comum/config/ele-c.json";
+function findCodes(){
+  var box = $("found"); box.textContent = T("findLooking");
+  getJSON(CONFIG_URL).then(function(c){
+    var hits = [];
+    (function walk(o, d){
+      if (d > 7 || hits.length >= 12) return;
+      if (Array.isArray(o)) return o.forEach(function(x){ walk(x, d + 1); });
+      if (!o || typeof o !== "object") return;
+      var txt = Object.keys(o).filter(function(k){ return typeof o[k] === "string" || typeof o[k] === "number"; }).map(function(k){ return o[k]; }).join(" | ");
+      if (/federal|presid/i.test(txt)){
+        var code = ["cd", "e", "cdele", "ele"].map(function(k){ return String(o[k] == null ? "" : o[k]); }).filter(function(v){ return /^\d{3,6}$/.test(v); })[0];
+        hits.push({ txt: txt.slice(0, 110), code: code });
+      }
+      Object.keys(o).forEach(function(k){ if (o[k] && typeof o[k] === "object") walk(o[k], d + 1); });
+    })(c, 0);
+    if (!hits.length){ box.innerHTML = T("findNone", { link: '<a href="' + CONFIG_URL + '" target="_blank" rel="noopener" style="color:var(--accent)">' + esc(T("findLink")) + '</a>' }); return; }
+    box.innerHTML = '<small>' + esc(T("findPrompt")) + '</small>' + hits.map(function(h, i){
+      return '<button data-code="' + esc(h.code || "") + '">' + esc(h.txt) + (h.code ? "  -  " + esc(T("findCode", { c: h.code })) : "") + "</button>";
+    }).join("");
+  }).catch(function(e){ box.textContent = T("findErr", { msg: e.message }); });
+}
+$("found").onclick = function(e){ var b = e.target.closest("button"); if (b && b.dataset.code){ $("code").value = b.dataset.code; setMsg("msgFilled", { code: b.dataset.code }); } };
+
+/* ---------- Charts, export, theme ---------- */
+var HIST = [];
+function drawTrend(){
+  var box = $("trend"), s = sides(), p = share(NAT), ln = nice(s.l.name);
+  $("trendSub").textContent = T("trendSub", { l: ln });
+  if (p){ var last = HIST[HIST.length - 1]; if (!last || last.l !== p.l || last.c !== NAT.counted){ HIST.push({ l: p.l, c: NAT.counted }); if (HIST.length > 200) HIST.shift(); } }
+  if (HIST.length < 2){ box.innerHTML = '<div class="empty">' + esc(T("trendEmpty")) + "</div>"; return; }
+  var W = 640, Ht = 230, ml = 46, mr = 92, mt = 12, mb = 28, vals = HIST.map(function(h){ return h.l; });
+  var lo = Math.min.apply(null, vals.concat([50, L22])) - 2, hi = Math.max.apply(null, vals.concat([50, L22])) + 2;
+  if (hi - lo < 8){ var mid = (hi + lo) / 2; lo = mid - 4; hi = mid + 4; }
+  var X = function(i){ return ml + (W - ml - mr) * i / (HIST.length - 1); }, Y = function(v){ return mt + (Ht - mt - mb) * (1 - (v - lo) / (hi - lo)); };
+  var svg = '<svg viewBox="0 0 ' + W + " " + Ht + '" role="img" aria-label="' + esc(T("trendTitle")) + '">';
+  for (var i = 0; i <= 4; i++){ var v = lo + (hi - lo) * i / 4; svg += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + Y(v) + '" y2="' + Y(v) + '" stroke="var(--edge)"/><text x="' + (ml - 6) + '" y="' + (Y(v) + 4) + '" text-anchor="end" font-size="11" fill="var(--muted)">' + fx(v, 1) + "%</text>"; }
+  svg += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + Y(50) + '" y2="' + Y(50) + '" stroke="var(--muted)" stroke-dasharray="5 4"/><text x="' + (W - mr + 6) + '" y="' + (Y(50) + 4) + '" font-size="11" fill="var(--muted)">50%</text>';
+  svg += '<line x1="' + ml + '" x2="' + (W - mr) + '" y1="' + Y(L22) + '" y2="' + Y(L22) + '" stroke="var(--accent)" stroke-dasharray="5 4"/><text x="' + (W - mr + 6) + '" y="' + (Y(L22) - 4) + '" font-size="11" fill="var(--accent)">2022: ' + fx(L22, 1) + "%</text>";
+  svg += '<polyline fill="none" stroke="var(--lula)" stroke-width="2.5" stroke-linejoin="round" points="' + HIST.map(function(h, i){ return X(i).toFixed(1) + "," + Y(h.l).toFixed(1); }).join(" ") + '"/>';
+  var e = HIST[HIST.length - 1];
+  svg += '<circle cx="' + X(HIST.length - 1) + '" cy="' + Y(e.l) + '" r="4.5" fill="var(--lula)"/><text x="' + (X(HIST.length - 1) + 8) + '" y="' + (Y(e.l) + 4) + '" font-size="12" font-weight="700" fill="var(--lula)">' + fx(e.l, 2) + "%</text>";
+  svg += '<text x="' + ml + '" y="' + (Ht - 8) + '" font-size="11" fill="var(--muted)">' + esc(T("counted")) + " " + fx(HIST[0].c, 0) + '%</text><text x="' + (W - mr) + '" y="' + (Ht - 8) + '" text-anchor="end" font-size="11" fill="var(--muted)">' + fx(e.c, 0) + "%</text></svg>";
+  box.innerHTML = svg;
+}
+function drawSwing(){
+  var box = $("swing"), s = sides(), ln = nice(s.l.name), rn = nice(s.r.name), rows = [];
+  $("swingSub").textContent = T("swingSub", { l: ln, r: rn });
+  AREAS.slice(1).forEach(function(a){ var q = share(S[a[0]]); if (q) rows.push({ uf: a[0], name: a[1], d: q.l - a[2] }); });
+  if (!rows.length){ box.innerHTML = '<div class="empty">' + esc(T("swingEmpty")) + "</div>"; return; }
+  rows.sort(function(x, y){ return y.d - x.d; });
+  var mx = Math.max.apply(null, rows.map(function(r){ return Math.abs(r.d); })) || 1;
+  box.innerHTML = rows.map(function(r){
+    var w = Math.abs(r.d) / mx * 50, pos = r.d >= 0;
+    return '<div class="srw" title="' + esc(r.name) + '"><b>' + r.uf.toUpperCase() + '</b><div class="sbar"><i class="' + (pos ? "p" : "n") + '" style="width:' + w + "%;" + (pos ? "left:50%" : "right:50%") + '"></i></div><span class="num">' + (pos ? "+" : "") + fx(r.d, 1) + "</span></div>";
+  }).join("");
+}
+function csvText(){
+  var s = sides(), ln = nice(s.l.name), rn = nice(s.r.name);
+  var rows = [[T("colState"), T("colCounted") + " %", ln + " %", rn + " %", ln + " 2022 %", T("colSwing")]];
+  AREAS.forEach(function(a){ var d = S[a[0]], q = share(d); rows.push([a[1], d ? d.counted.toFixed(1) : "", q ? q.l.toFixed(2) : "", q ? q.r.toFixed(2) : "", a[2].toFixed(2), q ? (q.l - a[2]).toFixed(2) : ""]); });
+  return rows.map(function(r){ return r.map(function(c){ return '"' + String(c).replace(/"/g, '""') + '"'; }).join(","); }).join("\r\n");
+}
+function exportCsv(){
+  try {
+    var b = new Blob(["\ufeff" + csvText()], { type: "text/csv;charset=utf-8" }), u = URL.createObjectURL(b), a = document.createElement("a");
+    a.href = u; a.download = "brazil-runoff-2026.csv"; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(u); }, 1000);
+  } catch (e) {}
+}
+function setTheme(t){ document.documentElement.dataset.theme = t; try { localStorage.setItem("theme", t); } catch (e) {} }
+(function(){ var t = null; try { t = localStorage.getItem("theme"); } catch (e) {} document.documentElement.dataset.theme = t === "light" ? "light" : "dark"; })();
+
+/* ---------- Buttons ---------- */
+function pick(m){ $("btnDemo").className = m === "demo" ? "on" : ""; $("btnLive").className = m === "live" ? "on" : ""; $("livebox").style.display = m === "live" ? "block" : "none"; }
+$("btnDemo").onclick = function(){ pick("demo"); startDemo(); };
+$("btnLive").onclick = function(){ pick("live"); stop(); mode = "idle"; reset(); setStatus("statusEnter", false); };
+$("btnStart").onclick = function(){ startLive($("code").value); };
+$("btnFind").onclick = findCodes;
+$("btnTest").onclick = function(){ $("code").value = "6257"; startLive("6257"); };
+$("pair").onchange = function(){ pairKey = this.value; userPicked = true; render(); };
+$("sort").onchange = sortRows;
+$("state").onchange = function(){ cityUF = this.value; $("csearch").value = ""; if (mode === "demo") demoCities(); renderCities(); if (mode === "live" && liveCode) loadCities(liveCode); };
+$("csearch").oninput = renderCities;
+$("btnExport").onclick = exportCsv;
+$("btnTheme").onclick = function(){ setTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light"); };
+$("lang").onchange = function(){ setLang(this.value); };
+$("btnNow").onclick = function(){
+  if (mode !== "live" || !liveCode){ setMsg("msgCheckNow"); return; }
+  if (busy) return;
+  stop(); fails = 0; setMsg(""); logLine("logManual"); cycle(liveCode);
+};
+$("country").onchange = function(){ cSel = this.value; renderCountries(); };
+$("cbody").onclick = function(e){ var r = e.target.closest(".crow"); if (r && r.dataset.c){ cSel = r.dataset.c; renderCountries(); } };
+
+initLang(); build(); buildTiles(); paintStatus(); paintFoot(); countdown(); setInterval(countdown, 60000); setInterval(updateHealth, 1000);
+pick("demo"); startDemo();
+</script>
+</body>
+</html>
